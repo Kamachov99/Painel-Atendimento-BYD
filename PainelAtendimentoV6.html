@@ -1,0 +1,1446 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BYD | Service</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+    >
+
+    <style>
+        :root {
+            --blue: #0755a5;
+            --blue-light: #1687e8;
+            --blue-dark: #062b55;
+            --green: #169b62;
+            --green-light: #24c781;
+            --red: #c93838;
+            --background: #071a2d;
+            --panel: #10283f;
+            --panel-light: #173650;
+            --text: #f3f7fb;
+            --muted: #a9bdcf;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--text);
+            font-family: "Segoe UI", Arial, sans-serif;
+            background:
+                radial-gradient(
+                    circle at 50% 0%,
+                    #123b60 0,
+                    #081d32 45%,
+                    #061321 100%
+                );
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        .topbar {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px;
+            background: linear-gradient(100deg, #073d78, #00457e, #073d78);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.17);
+            box-shadow: 0 5px 24px rgba(0, 0, 0, 0.24);
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: clamp(18px, 2.1vw, 5px);
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-align: center;
+        }
+
+        .dashboard {
+            width: 100%;
+            max-width: 2200px;
+            margin: 0 auto;
+            padding: 16px 20px 22px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1.18fr) minmax(0, 1fr);
+            gap: 16px;
+            align-items: stretch;
+        }
+
+        .panel,
+        .current-panel {
+            min-width: 0;
+            background: rgba(13, 35, 55, 0.94);
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .panel {
+            height: min(65vh, 700px);
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            flex: 0 0 54px;
+            min-height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 0 14px;
+            font-size: clamp(13px, 1.1vw, 16px);
+            font-weight: 750;
+            letter-spacing: 0.4px;
+        }
+
+        .panel-header-title {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            min-width: 0;
+        }
+
+        .executing-header {
+            background: linear-gradient(100deg, #0752a0, #087bd7);
+        }
+
+        .media-header {
+            justify-content: center;
+            background: linear-gradient(100deg, #172e43, #234b68);
+        }
+
+        .finished-header {
+            background: linear-gradient(100deg, #08794b, #16a76a);
+        }
+
+        .panel-body {
+            height: calc(100% - 54px);
+            min-height: 0;
+            padding: 12px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            overscroll-behavior: contain;
+            scrollbar-width: thin;
+            scrollbar-color: #496a86 #0b1d2d;
+        }
+
+        .panel-body::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        .panel-body::-webkit-scrollbar-track {
+            background: #0b1d2d;
+        }
+
+        .panel-body::-webkit-scrollbar-thumb {
+            background: #496a86;
+            border-radius: 8px;
+        }
+
+        .small-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 7px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            border-radius: 7px;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.12);
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .small-action:hover {
+            background: rgba(255, 255, 255, 0.24);
+            transform: translateY(-1px);
+        }
+
+        .vehicle-list {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .vehicle-item {
+            padding: 12px;
+            background: linear-gradient(135deg, #173750, #102a40);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-left: 4px solid var(--blue-light);
+            border-radius: 9px;
+            animation: cardAppear 0.25s ease;
+        }
+
+        .vehicle-item.finished {
+            border-left-color: var(--green-light);
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .vehicle-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .vehicle-name {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 800;
+            line-height: 1.35;
+            overflow-wrap: anywhere;
+        }
+
+        .vehicle-id {
+            color: #c0d8ed;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .vehicle-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 7px 10px;
+        }
+
+        .info-block {
+            min-width: 0;
+        }
+
+        .info-label {
+            display: block;
+            margin-bottom: 2px;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 650;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            display: block;
+            color: #f3f7fb;
+            font-size: 12px;
+            font-weight: 650;
+            overflow-wrap: anywhere;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+            padding: 4px 8px;
+            border-radius: 20px;
+            color: #d5eaff;
+            background: rgba(22, 135, 232, 0.2);
+            font-size: 10px;
+            font-weight: 750;
+        }
+
+        .finished .status-pill {
+            color: #c9ffe3;
+            background: rgba(36, 199, 129, 0.16);
+        }
+
+        .finish-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            margin-top: 11px;
+            padding: 8px 10px;
+            color: white;
+            background: linear-gradient(100deg, #087bce, #1197ed);
+            border: 0;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: 750;
+            cursor: pointer;
+            transition: filter 0.2s, transform 0.2s;
+        }
+
+        .finish-btn:hover {
+            filter: brightness(1.13);
+            transform: translateY(-1px);
+        }
+
+        .empty-message {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            padding: 20px 12px;
+            color: #90a8bd;
+            text-align: center;
+        }
+
+        .empty-message i {
+            margin-bottom: 12px;
+            font-size: 35px;
+            opacity: 0.65;
+        }
+
+        .empty-message p {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* Painel central de vídeos */
+
+        .media-panel {
+            background: rgba(5, 18, 31, 0.92);
+        }
+
+        .media-panel .panel-body {
+            height: 100%;
+            padding: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 65px;
+        }
+
+        .byd-logo {
+            width: 80%;
+            text-align: center;
+            flex: 0 0 auto;
+        }
+
+        .byd-logo img {
+            display: block;
+            width: min(72%, 280px);
+            max-height: 90px;
+            object-fit: contain;
+            margin: 0 auto;
+        }
+
+        .byd-logo-text {
+            color: #fff;
+            font-size: clamp(32px, 4vw, 56px);
+            font-weight: 900;
+            letter-spacing: 5px;
+            line-height: 1.1;
+        }
+
+        .byd-logo-caption {
+            margin-top: 6px;
+            color: #9bb8d0;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 3px;
+        }
+
+        .video-window {
+            width: 100%;
+            max-width: 850px;
+            aspect-ratio: 16 / 9;
+            flex: 0 0 auto;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+        }
+
+        .video-carousel,
+        .video-carousel .owl-stage-outer,
+        .video-carousel .owl-stage,
+        .video-carousel .owl-item,
+        .video-card {
+            height: 100%;
+        }
+
+        .video-carousel .owl-stage {
+            display: flex;
+        }
+
+        .video-card video {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .video-caption {
+            color: #7896b0;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        /* Resumo inferior */
+
+        .current-panel {
+            margin-top: 16px;
+            min-height: 175px;
+        }
+
+        .current-panel-header {
+            min-height: 45px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 0 16px;
+            background: linear-gradient(100deg, #183c5a, #10283f);
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .current-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        .current-section {
+            min-width: 0;
+            padding: 14px 18px;
+        }
+
+        .current-section + .current-section {
+            border-left: 1px solid var(--border);
+        }
+
+        .current-section h3 {
+            margin: 0 0 10px;
+            color: #a9c7df;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .current-section .highlight-name {
+            margin-bottom: 5px;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 800;
+            overflow-wrap: anywhere;
+        }
+
+        .current-section .highlight-info {
+            color: #b1c6d8;
+            font-size: 12px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .highlight-status {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 4px 8px;
+            border-radius: 20px;
+            color: #c8ffe2;
+            background: rgba(36, 199, 129, 0.14);
+            font-size: 10px;
+            font-weight: 750;
+        }
+
+        /* Botão discreto para limpeza */
+
+        .clear-data-btn {
+            position: fixed;
+            right: 15px;
+            bottom: 14px;
+            z-index: 1000;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 11px;
+            color: #c0ccda;
+            background: rgba(10, 24, 39, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 650;
+            opacity: 0.65;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .clear-data-btn:hover,
+        .clear-data-btn:focus-visible {
+            color: #fff;
+            background: #9e2929;
+            border-color: #d84c4c;
+            opacity: 1;
+        }
+
+        .clear-data-btn i {
+            font-size: 14px;
+        }
+
+        /* Responsividade */
+
+        @media (max-width: 1100px) {
+            .dashboard {
+                padding: 12px;
+            }
+
+            .main-grid {
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            }
+
+            .media-panel {
+                grid-column: 1 / -1;
+                grid-row: 1;
+                height: auto;
+                min-height: 0;
+            }
+
+            .media-panel .panel-body {
+                padding: 20px;
+            }
+
+            .byd-logo img {
+                max-height: 70px;
+            }
+
+            .video-window {
+                width: min(100%, 760px);
+            }
+
+            .panel {
+                height: 60vh;
+                min-height: 420px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .topbar {
+                height: 62px;
+            }
+
+            .dashboard {
+                padding: 10px;
+            }
+
+            .main-grid {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 12px;
+            }
+
+            .media-panel {
+                grid-column: auto;
+            }
+
+            .panel {
+                height: 440px;
+                min-height: 360px;
+            }
+
+            .current-body {
+                grid-template-columns: 1fr;
+            }
+
+            .current-section + .current-section {
+                border-left: 0;
+                border-top: 1px solid var(--border);
+            }
+
+            .clear-data-btn {
+                right: 8px;
+                bottom: 8px;
+            }
+
+            .clear-data-btn span {
+                display: none;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <h1>PAINEL DE SERVIÇOS</h1>
+    </header>
+
+    <main class="dashboard">
+        <section class="main-grid">
+
+            <!-- Serviços em execução -->
+            <section class="panel">
+                <header class="panel-header executing-header">
+                    <div class="panel-header-title">
+                        <i class="bi bi-tools"></i>
+                        <span>Em execução</span>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="small-action"
+                        id="addServiceBtn"
+                        title="Adicionar serviço fictício"
+                    >
+                        <i class="bi bi-plus-lg"></i>
+                        Novo serviço
+                    </button>
+                </header>
+
+                <div class="panel-body" id="executingPanelBody">
+                    <div class="vehicle-list" id="executingList"></div>
+                </div>
+            </section>
+
+            <!-- Vídeos promocionais -->
+            <section class="panel media-panel">
+                </header>
+
+                <div class="panel-body">
+                    <div class="byd-logo">
+                        <!--
+                            Se possuir um arquivo de logo, coloque-o na pasta
+                            do painel e descomente a linha abaixo, ajustando o caminho.
+                        -->
+                        <img src="BYD-Logo.png" alt="BYD">
+                    </div>
+
+                    <div class="video-window">
+                        <div class="video-carousel owl-carousel" id="videoCarousel">
+                            <div class="video-card">
+                                <video src="videos/video1.mp4" muted playsinline preload="metadata"></video>
+                            </div>
+                            <div class="video-card">
+                                <video src="videos/video2.mp4" muted playsinline preload="metadata"></video>
+                            </div>
+                            <div class="video-card">
+                                <video src="videos/video3.mp4" muted playsinline preload="metadata"></video>
+                            </div>
+                            <div class="video-card">
+                                <video src="videos/video4.mp4" muted playsinline preload="metadata"></video>
+                            </div>
+                            <div class="video-card">
+                                <video src="videos/video5.mp4" muted playsinline preload="metadata"></video>
+                            </div>
+                            <div class="video-card">
+                                <video src="videos/video6.mp4" muted playsinline preload="metadata"></video>
+                            </div>
+                            <div class="video-card">
+                                <video src="videos/video7.mp4" muted playsinline preload="metadata"></video>
+                            </div>
+                            <div class="video-card">
+                                <video src="videos/video8.mp4" muted playsinline preload="metadata"></video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Serviços finalizados -->
+            <section class="panel">
+                <header class="panel-header finished-header">
+                    <div class="panel-header-title">
+                        <i class="bi bi-check-circle"></i>
+                        <span>Finalizados</span>
+                    </div>
+                </header>
+
+                <div class="panel-body" id="finishedPanelBody">
+                    <div class="vehicle-list" id="finishedList"></div>
+                </div>
+            </section>
+
+        </section>
+
+        <!-- Resumo do serviço mais recente -->
+        <section class="current-panel">
+            <header class="current-panel-header">
+                <i class="bi bi-speedometer2"></i>
+                <span>Resumo dos atendimentos</span>
+            </header>
+
+            <div class="current-body">
+                <section class="current-section">
+                    <h3>
+                        <i class="bi bi-wrench-adjustable-circle"></i>
+                        Último serviço em execução
+                    </h3>
+                    <div class="highlight-name" id="lastVehicleName">
+                        Nenhum serviço em execução
+                    </div>
+                    <div class="highlight-info" id="lastVehicleInfo">
+                        Os novos atendimentos aparecerão aqui.
+                    </div>
+                </section>
+
+                <section class="current-section">
+                    <h3>
+                        <i class="bi bi-check2-circle"></i>
+                        Último serviço finalizado
+                    </h3>
+                    <div class="highlight-name" id="lastFinishedName">
+                        Nenhum serviço finalizado
+                    </div>
+                    <div class="highlight-info" id="lastFinishedInfo">
+                        Os serviços concluídos aparecerão aqui.
+                    </div>
+                    <div class="highlight-status" id="lastFinishedStatus" hidden>
+                        <i class="bi bi-check-circle-fill"></i>
+                        Serviço concluído
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <!-- Botão discreto para limpar todos os serviços -->
+    <button
+        type="button"
+        id="clearDataBtn"
+        class="clear-data-btn"
+        title="Limpar todos os serviços e os dados salvos"
+        aria-label="Limpar todos os serviços"
+    >
+        <i class="bi bi-trash3"></i>
+        <span>Limpar dados</span>
+    </button>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+    <script>
+        "use strict";
+
+        // =========================================================
+        // DADOS E ARMAZENAMENTO
+        // =========================================================
+
+        const STORAGE_KEY = "byd_painel_servicos_v1";
+
+        const customerNames = [
+            "Mariana Oliveira",
+            "Carlos Eduardo",
+            "Fernanda Santos",
+            "Rafael Almeida",
+            "Juliana Costa",
+            "Gabriel Souza",
+            "Camila Rodrigues",
+            "Lucas Ferreira",
+            "Beatriz Lima",
+            "Thiago Martins",
+            "Ana Clara Ribeiro",
+            "Pedro Henrique"
+        ];
+
+        const vehicleNames = [
+            "BYD Dolphin",
+            "BYD Dolphin Mini",
+            "BYD Yuan Plus",
+            "BYD Song Plus",
+            "BYD Song Pro",
+            "BYD Seal",
+            "BYD King",
+            "BYD Tan"
+        ];
+
+        const serviceTypes = [
+            "Revisão periódica",
+            "Diagnóstico eletrônico",
+            "Manutenção preventiva",
+            "Verificação do sistema elétrico",
+            "Revisão de freios",
+            "Atualização de sistema",
+            "Inspeção geral",
+            "Verificação de suspensão",
+            "Troca de filtros",
+            "Avaliação de bateria"
+        ];
+
+        const vehicleColors = [
+            "Branco",
+            "Preto",
+            "Prata",
+            "Cinza",
+            "Azul",
+            "Vermelho"
+        ];
+
+        let vehicles = loadVehicles();
+
+        let nextId = Math.max(
+            0,
+            ...vehicles.map(vehicle => Number(vehicle.id) || 0)
+        ) + 1;
+
+        function loadVehicles() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+
+                if (!saved) {
+                    return [];
+                }
+
+                const parsed = JSON.parse(saved);
+
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (error) {
+                console.error("Erro ao carregar os serviços:", error);
+                return [];
+            }
+        }
+
+        function saveVehicles() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(vehicles));
+            } catch (error) {
+                console.error("Erro ao salvar os serviços:", error);
+
+                alert(
+                    "Não foi possível salvar os dados no navegador. " +
+                    "Verifique as permissões de armazenamento."
+                );
+            }
+        }
+
+        function randomItem(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        function generateUniquePlate() {
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+            let plate;
+            let attempts = 0;
+
+            do {
+                const prefix =
+                    letters[Math.floor(Math.random() * letters.length)] +
+                    letters[Math.floor(Math.random() * letters.length)] +
+                    letters[Math.floor(Math.random() * letters.length)];
+
+                const number = String(
+                    Math.floor(1000 + Math.random() * 9000)
+                );
+
+                plate = `${prefix}-${number}`;
+                attempts++;
+            } while (
+                vehicles.some(vehicle => vehicle.plate === plate) &&
+                attempts < 100
+            );
+
+            return plate;
+        }
+
+        function currentTime() {
+            return new Date().toLocaleString("pt-BR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+        }
+
+        function createFictionalService() {
+            const service = {
+                id: nextId++,
+                customer: randomItem(customerNames),
+                model: randomItem(vehicleNames),
+                service: randomItem(serviceTypes),
+                color: randomItem(vehicleColors),
+                plate: generateUniquePlate(),
+                createdAt: currentTime(),
+                status: "executing",
+                finishedTime: null
+            };
+
+            return service;
+        }
+
+        // =========================================================
+        // CRIAÇÃO E FINALIZAÇÃO DE SERVIÇOS
+        // =========================================================
+
+        document
+            .getElementById("addServiceBtn")
+            .addEventListener("click", function () {
+                const service = createFictionalService();
+
+                vehicles.push(service);
+
+                saveVehicles();
+                renderVehicles();
+            });
+
+        function finishService(id) {
+            const vehicle = vehicles.find(
+                item => Number(item.id) === Number(id)
+            );
+
+            if (!vehicle || vehicle.status === "finished") {
+                return;
+            }
+
+            vehicle.status = "finished";
+            vehicle.finishedTime = currentTime();
+
+            saveVehicles();
+            renderVehicles();
+        }
+
+        // =========================================================
+        // LIMPAR OS DADOS
+        // =========================================================
+
+        document
+            .getElementById("clearDataBtn")
+            .addEventListener("click", function () {
+                if (vehicles.length === 0) {
+                    alert("Não existem serviços para limpar.");
+                    return;
+                }
+
+                const executingCount = vehicles.filter(
+                    vehicle => vehicle.status === "executing"
+                ).length;
+
+                const finishedCount = vehicles.filter(
+                    vehicle => vehicle.status === "finished"
+                ).length;
+
+                const confirmation = confirm(
+                    "Deseja realmente limpar todos os dados do painel?\n\n" +
+                    `Serviços em execução: ${executingCount}\n` +
+                    `Serviços finalizados: ${finishedCount}\n\n` +
+                    "Essa ação não poderá ser desfeita."
+                );
+
+                if (!confirmation) {
+                    return;
+                }
+
+                vehicles = [];
+                nextId = 1;
+
+                try {
+                    localStorage.removeItem(STORAGE_KEY);
+                } catch (error) {
+                    console.error(
+                        "Erro ao remover os dados armazenados:",
+                        error
+                    );
+                }
+
+                saveVehicles();
+                renderVehicles();
+
+                alert("Todos os serviços foram removidos do painel.");
+            });
+
+        // =========================================================
+        // MONTAGEM DOS CARDS
+        // =========================================================
+
+        function createInfoBlock(label, value) {
+            const block = document.createElement("div");
+            block.className = "info-block";
+
+            const labelElement = document.createElement("span");
+            labelElement.className = "info-label";
+            labelElement.textContent = label;
+
+            const valueElement = document.createElement("span");
+            valueElement.className = "info-value";
+            valueElement.textContent = value || "Não informado";
+
+            block.append(labelElement, valueElement);
+
+            return block;
+        }
+
+        function createVehicleCard(vehicle, isFinished) {
+            const card = document.createElement("article");
+
+            card.className = isFinished
+                ? "vehicle-item finished"
+                : "vehicle-item";
+
+            const top = document.createElement("div");
+            top.className = "vehicle-top";
+
+            const name = document.createElement("h3");
+            name.className = "vehicle-name";
+            name.textContent = vehicle.customer;
+
+            const id = document.createElement("span");
+            id.className = "vehicle-id";
+            id.textContent = `#${String(vehicle.id).padStart(3, "0")}`;
+
+            top.append(name, id);
+
+            const info = document.createElement("div");
+            info.className = "vehicle-info";
+
+            info.append(
+                createInfoBlock("Veículo", vehicle.model),
+                createInfoBlock("Placa", vehicle.plate),
+                createInfoBlock("Serviço", vehicle.service),
+                createInfoBlock("Cor", vehicle.color),
+                createInfoBlock("Entrada", vehicle.createdAt)
+            );
+
+            if (isFinished) {
+                info.append(
+                    createInfoBlock(
+                        "Finalizado",
+                        vehicle.finishedTime || "Não informado"
+                    )
+                );
+            }
+
+            const status = document.createElement("div");
+            status.className = "status-pill";
+
+            if (isFinished) {
+                status.innerHTML =
+                    '<i class="bi bi-check-circle-fill"></i> Finalizado';
+            } else {
+                status.innerHTML =
+                    '<i class="bi bi-arrow-repeat"></i> Em execução';
+            }
+
+            card.append(top, info, status);
+
+            if (!isFinished) {
+                const finishButton = document.createElement("button");
+
+                finishButton.type = "button";
+                finishButton.className = "finish-btn";
+                finishButton.innerHTML =
+                    '<i class="bi bi-check2-circle"></i> Finalizar serviço';
+
+                finishButton.addEventListener("click", function () {
+                    finishService(vehicle.id);
+                });
+
+                card.appendChild(finishButton);
+            }
+
+            return card;
+        }
+
+        function showEmptyMessage(container, isFinished) {
+            const message = document.createElement("div");
+            message.className = "empty-message";
+
+            const icon = document.createElement("i");
+            icon.className = isFinished
+                ? "bi bi-clipboard-check"
+                : "bi bi-clipboard2";
+
+            const text = document.createElement("p");
+            text.textContent = isFinished
+                ? "Nenhum serviço finalizado ainda."
+                : "Nenhum serviço em execução no momento.";
+
+            message.append(icon, text);
+            container.appendChild(message);
+        }
+
+        // =========================================================
+        // RENDERIZAÇÃO DOS PAINÉIS
+        // =========================================================
+
+        function renderVehicles() {
+            const executingList = document.getElementById("executingList");
+            const finishedList = document.getElementById("finishedList");
+
+            executingList.replaceChildren();
+            finishedList.replaceChildren();
+
+            const executingVehicles = vehicles
+                .filter(vehicle => vehicle.status === "executing")
+                .slice()
+                .reverse();
+
+            const finishedVehicles = vehicles
+                .filter(vehicle => vehicle.status === "finished")
+                .slice()
+                .reverse();
+
+            if (executingVehicles.length === 0) {
+                showEmptyMessage(executingList, false);
+            } else {
+                executingVehicles.forEach(vehicle => {
+                    executingList.appendChild(
+                        createVehicleCard(vehicle, false)
+                    );
+                });
+            }
+
+            if (finishedVehicles.length === 0) {
+                showEmptyMessage(finishedList, true);
+            } else {
+                finishedVehicles.forEach(vehicle => {
+                    finishedList.appendChild(
+                        createVehicleCard(vehicle, true)
+                    );
+                });
+            }
+
+            renderHighlights();
+
+            // Recalcula a rolagem sempre que as listas forem atualizadas.
+            refreshAutoScroll();
+        }
+
+        function renderHighlights() {
+            const executing = vehicles
+                .filter(vehicle => vehicle.status === "executing")
+                .slice()
+                .reverse();
+
+            const finished = vehicles
+                .filter(vehicle => vehicle.status === "finished")
+                .slice()
+                .reverse();
+
+            const lastVehicleName =
+                document.getElementById("lastVehicleName");
+
+            const lastVehicleInfo =
+                document.getElementById("lastVehicleInfo");
+
+            const lastFinishedName =
+                document.getElementById("lastFinishedName");
+
+            const lastFinishedInfo =
+                document.getElementById("lastFinishedInfo");
+
+            const lastFinishedStatus =
+                document.getElementById("lastFinishedStatus");
+
+            if (executing.length > 0) {
+                const vehicle = executing[0];
+
+                lastVehicleName.textContent = vehicle.customer;
+
+                lastVehicleInfo.textContent =
+                    `${vehicle.model} • Placa: ${vehicle.plate} • ` +
+                    `${vehicle.service} • Entrada: ${vehicle.createdAt}`;
+            } else {
+                lastVehicleName.textContent =
+                    "Nenhum serviço em execução";
+
+                lastVehicleInfo.textContent =
+                    "Os novos atendimentos aparecerão aqui.";
+            }
+
+            if (finished.length > 0) {
+                const vehicle = finished[0];
+
+                lastFinishedName.textContent = vehicle.customer;
+
+                lastFinishedInfo.textContent =
+                    `${vehicle.model} • Placa: ${vehicle.plate} • ` +
+                    `${vehicle.service} • Finalizado: ` +
+                    `${vehicle.finishedTime || "Não informado"}`;
+
+                lastFinishedStatus.hidden = false;
+            } else {
+                lastFinishedName.textContent =
+                    "Nenhum serviço finalizado";
+
+                lastFinishedInfo.textContent =
+                    "Os serviços concluídos aparecerão aqui.";
+
+                lastFinishedStatus.hidden = true;
+            }
+        }
+
+        // =========================================================
+        // AUTO-SCROLL DAS DUAS LISTAS
+        // =========================================================
+
+        const autoScrollPanels = [
+            document.getElementById("executingPanelBody"),
+            document.getElementById("finishedPanelBody")
+        ];
+
+        const autoScrollStates = new Map();
+
+        /*
+         * Os eventos de mouse e foco são registrados apenas uma vez.
+         * Isso evita acumular listeners a cada atualização dos serviços.
+         */
+        autoScrollPanels.forEach(panel => {
+            const state = {
+                timer: null,
+                restartTimer: null,
+                hover: false,
+                focused: false,
+                pausedAtEnd: false
+            };
+
+            autoScrollStates.set(panel, state);
+
+            panel.addEventListener("mouseenter", function () {
+                state.hover = true;
+            });
+
+            panel.addEventListener("mouseleave", function () {
+                state.hover = false;
+            });
+
+            panel.addEventListener("focusin", function () {
+                state.focused = true;
+            });
+
+            panel.addEventListener("focusout", function () {
+                state.focused = false;
+            });
+        });
+
+        function stopAutoScroll(panel, state) {
+            if (state.timer !== null) {
+                clearInterval(state.timer);
+                state.timer = null;
+            }
+
+            if (state.restartTimer !== null) {
+                clearTimeout(state.restartTimer);
+                state.restartTimer = null;
+            }
+
+            state.pausedAtEnd = false;
+        }
+
+        function refreshAutoScroll() {
+            const reducedMotion = window.matchMedia(
+                "(prefers-reduced-motion: reduce)"
+            ).matches;
+
+            autoScrollPanels.forEach(panel => {
+                const state = autoScrollStates.get(panel);
+
+                stopAutoScroll(panel, state);
+
+                /*
+                 * Sempre recomeça pelo início depois de renderizar a lista,
+                 * deixando os serviços mais recentes visíveis primeiro.
+                 */
+                panel.scrollTop = 0;
+
+                /*
+                 * Se o usuário prefere movimento reduzido, a rolagem
+                 * automática fica desativada, mas a rolagem manual continua.
+                 */
+                if (reducedMotion) {
+                    return;
+                }
+
+                /*
+                 * Só ativa quando o conteúdo excede a altura disponível.
+                 * O pequeno limite evita ativação por diferenças de pixels.
+                 */
+                if (panel.scrollHeight <= panel.clientHeight + 2) {
+                    return;
+                }
+
+                state.timer = setInterval(function () {
+                    if (
+                        state.hover ||
+                        state.focused ||
+                        document.hidden ||
+                        state.pausedAtEnd
+                    ) {
+                        return;
+                    }
+
+                    const maxScroll =
+                        panel.scrollHeight - panel.clientHeight;
+
+                    if (maxScroll <= 0) {
+                        stopAutoScroll(panel, state);
+                        return;
+                    }
+
+                    if (panel.scrollTop >= maxScroll - 1) {
+                        /*
+                         * Ao chegar ao fim, pausa por 1,5 segundo
+                         * antes de retornar ao topo.
+                         */
+                        state.pausedAtEnd = true;
+
+                        state.restartTimer = setTimeout(function () {
+                            panel.scrollTop = 0;
+                            state.pausedAtEnd = false;
+                            state.restartTimer = null;
+                        }, 1500);
+
+                        return;
+                    }
+
+                    /*
+                     * Velocidade aproximada: 25 pixels por segundo.
+                     * A coluna permanece rolável manualmente também.
+                     */
+                    panel.scrollTop = Math.min(
+                        panel.scrollTop + 1,
+                        maxScroll
+                    );
+                }, 40);
+            });
+        }
+
+        // Se a janela mudar de tamanho, recalcula o espaço disponível.
+        window.addEventListener("resize", function () {
+            refreshAutoScroll();
+        });
+
+        // =========================================================
+        // CARROSSEL DE VÍDEOS LOCAIS
+        // =========================================================
+
+        function initializeVideoCarousel() {
+            if (
+                typeof jQuery === "undefined" ||
+                !jQuery.fn.owlCarousel
+            ) {
+                console.warn(
+                    "O carrossel não foi iniciado. " +
+                    "Verifique a conexão com a internet."
+                );
+                return;
+            }
+
+            const $carousel = jQuery("#videoCarousel");
+
+            $carousel.owlCarousel({
+                items: 1,
+                loop: true,
+                nav: false,
+                dots: false,
+                autoplay: false,
+                smartSpeed: 500,
+                mouseDrag: false,
+                touchDrag: false
+            });
+
+            function stopAllVideos() {
+                $carousel.find("video").each(function () {
+                    this.pause();
+
+                    try {
+                        this.currentTime = 0;
+                    } catch (error) {
+                        // Alguns vídeos ainda não permitem alterar currentTime.
+                    }
+                });
+            }
+
+            function playActiveVideo() {
+                stopAllVideos();
+
+                const activeVideo = $carousel
+                    .find(".owl-item.active video")
+                    .get(0);
+
+                if (!activeVideo) {
+                    return;
+                }
+
+                const playPromise = activeVideo.play();
+
+                if (
+                    playPromise &&
+                    typeof playPromise.catch === "function"
+                ) {
+                    playPromise.catch(error => {
+                        console.warn(
+                            "Não foi possível iniciar o vídeo automaticamente:",
+                            error
+                        );
+                    });
+                }
+            }
+
+            $carousel.on("changed.owl.carousel", function () {
+                setTimeout(playActiveVideo, 100);
+            });
+
+            $carousel.find("video").each(function () {
+                this.addEventListener("ended", function () {
+                    $carousel.trigger("next.owl.carousel");
+                });
+
+                this.addEventListener("error", function () {
+                    console.warn(
+                        "Não foi possível carregar o vídeo:",
+                        this.currentSrc || this.src
+                    );
+                });
+            });
+
+            setTimeout(playActiveVideo, 400);
+        }
+
+        // =========================================================
+        // INICIALIZAÇÃO
+        // =========================================================
+
+        renderVehicles();
+        initializeVideoCarousel();
+    </script>
+</body>
+</html>

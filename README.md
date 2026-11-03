@@ -13,6 +13,7 @@ O painel exibe serviços **Em Execução** e **Finalizados**, possui área centr
 * **JavaScript (ES6+)**: Lógica do painel, manipulação de DOM, persistência local e controle de mídia.
 * **Bootstrap 5 & Bootstrap Icons**: Grid responsivo, tipografia e ícones de interface.
 * **jQuery & Owl Carousel 2**: Biblioteca e plugin para a criação do carrossel interativo de vídeos.
+* **Chat GPT & Google Gemini**: Auxílio da IA para algumas funcionalidades mais complexas e estrutura do Design do site com CSS.
 
 ---
 

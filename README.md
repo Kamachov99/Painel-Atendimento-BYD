@@ -76,3 +76,5 @@ byd-service-panel/
 ## 📌 Observações
 
 * Os vídeos e logotipos utilizados são apenas para fins de demonstração acadêmica e de portfólio, simulando a experiência de atendimento em uma concessionária BYD.
+# Painel-Atendimento-BYD
+Projeto de um Painel de Atendimento fictício para estudo, da matéria Algoritmos e Lógica de Progrmação do 1º Semestre de ADS pela Fatec Carapicuíba.
